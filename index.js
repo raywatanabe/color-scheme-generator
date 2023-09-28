@@ -2,16 +2,9 @@ const colorInput = document.getElementById("color-input")
 const selectMode = document.getElementById("select-mode")
 const getBtn = document.getElementById("get-btn")
 
-// fetch("https://www.thecolorapi.com/scheme?hex=0047AB&rgb=0,71,171&hsl=215,100%,34%&cmyk=100,58,0,33&format=json&mode=analogic&count=6",)
-//     .then(res => res.json())
-//     .then(data => console.log(data))
+getBtn.addEventListener("click", () => renderScheme())
 
-// colorInput.addEventListener("change", () => console.log(colorInput.value.slice(1)))
-
-
-getBtn.addEventListener("click", () => getColorScheme())
-
-function getColorScheme(){
+function renderScheme(){
     const seedColor = colorInput.value.slice(1)
     const mode = selectMode.value
 
@@ -21,7 +14,22 @@ function getColorScheme(){
             const hexArray = data.colors.map(color => {
                 return color.hex.value
             })
-            console.log(hexArray)
+
+            document.getElementById("main").innerHTML = ""
+            hexArray.forEach(hex => {
+                const color = document.createElement("div")
+                color.style.backgroundColor = hex
+
+                const hexValue = document.createElement("p")
+                hexValue.innerText = hex
+                color.append(hexValue)
+
+                color.addEventListener("click", function() {
+                    navigator.clipboard.writeText(hex)
+                    alert("Copied to clipboard")
+                } )
+                document.getElementById("main").append(color)
+            })
         })
 }
 
